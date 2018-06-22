@@ -39,11 +39,12 @@ func makefileCC(f *os.File, desc string, code string) error {
 	lines := strings.Split(code, "\n")
 
 	// #ifndef def
+	defineName := strings.Replace(strings.ToUpper(flagProblem), "-", "_", -1)
 	buf.WriteString("#ifndef _INC_")
-	buf.WriteString(strings.ToUpper(flagProblem))
+	buf.WriteString(defineName)
 	buf.WriteString("_\r\n")
 	buf.WriteString("#define _INC_")
-	buf.WriteString(strings.ToUpper(flagProblem))
+	buf.WriteString(defineName)
 	buf.WriteString("_\r\n")
 
 	// common include
@@ -64,13 +65,18 @@ func makefileCC(f *os.File, desc string, code string) error {
 	buf.WriteString("\r\n")
 	buf.WriteString("class ")
 	buf.WriteString(getCCClassName())
+	if flagType == "list" {
+		buf.WriteString(" : public SingleLinkedListCls")
+	} else if flagType == "btree" {
+		buf.WriteString(" : public TreeNodeCls")
+	}
 	buf.WriteString(" {\r\n")
 	buf.WriteString("public:\r\n")
 	buf.WriteString("\tstatic void test() {\r\n\t\r\n\t}\r\n\r\n")
 	buf.WriteString("\tstatic ")
-	for i := 1; i < len(lines); i++ {
+	for i := 2; i < len(lines)-1; i++ {
 		line := strings.TrimSpace(lines[i])
-		if i == 1 {
+		if i == 2 {
 			buf.WriteString(line)
 			buf.WriteString("\r\n")
 		} else {
@@ -81,7 +87,7 @@ func makefileCC(f *os.File, desc string, code string) error {
 			}
 		}
 	}
-	buf.WriteString("};\r\n")
+	buf.WriteString("};\r\n\r\n")
 
 	// #endif
 	buf.WriteString("#endif\r\n")

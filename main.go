@@ -17,6 +17,7 @@ var (
 	flagLanguage string
 	flagOutput   string
 	flagProblem  string
+	flagType     string
 )
 
 func getDescription(problemName string) string {
@@ -77,6 +78,7 @@ func initFlag() error {
 	flag.StringVar(&flagLanguage, "lan", "", "Problem solve language [C++/Go]")
 	flag.StringVar(&flagOutput, "output", "", "Solve problem template source file output directory")
 	flag.StringVar(&flagProblem, "problem", "", "Problem name, in slug format")
+	flag.StringVar(&flagType, "type", "", "Type of the problem, [list/btree]")
 	flag.Parse()
 
 	if "" == flagLanguage {
@@ -141,7 +143,7 @@ func makefile(desc string, code string) error {
 		filePath = flagOutput + "/"
 	}
 	filePath += fmt.Sprintf("%s.%s", flagProblem, lanExtensionFromString(flagLanguage))
-	of, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0644)
+	of, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if nil != err {
 		return fmt.Errorf("Open file error: %v", err)
 	}

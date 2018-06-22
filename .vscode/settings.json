@@ -1,3 +1,5 @@
 {
-    "go.gopath": "${workspaceRoot}/../../../../"
+    "go.gopath": "${workspaceRoot}/../../../../",
+    "go.lintOnSave": "off",
+    "go.vetOnSave": "off"
 }
