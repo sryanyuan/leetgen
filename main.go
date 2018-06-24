@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"html"
 	"log"
 	"os"
 	"strings"
@@ -30,7 +31,7 @@ func getDescription(problemName string) string {
 	doc.Find("meta[name=description]").Each(func(i int, selection *goquery.Selection) {
 		desc, _ = selection.Attr("content")
 	})
-	return desc
+	return html.UnescapeString(desc)
 }
 
 func getCodeDefinition(problemName string) string {
