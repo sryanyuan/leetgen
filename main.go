@@ -31,7 +31,7 @@ func getDescription(problemName string) string {
 	doc.Find("meta[name=description]").Each(func(i int, selection *goquery.Selection) {
 		desc, _ = selection.Attr("content")
 	})
-	return html.UnescapeString(desc)
+	return strings.Replace(html.UnescapeString(desc), "\n", "\r\n", -1)
 }
 
 func getCodeDefinition(problemName string) string {
@@ -60,7 +60,7 @@ func getCodeDefinition(problemName string) string {
 		panic(err)
 	}
 
-	return definition
+	return strings.Replace(definition, "\n", "\r\n", -1)
 }
 
 func createCodeDefinitionTask(problemName string, definition *string, lanv int) chromedp.Tasks {
