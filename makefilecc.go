@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"unicode"
 )
 
 func getCCClassName() string {
@@ -22,7 +23,11 @@ func getCCClassName() string {
 			nextUc = true
 		} else {
 			if nextUc {
-				name = append(name, v-32)
+				if unicode.IsLetter(v) {
+					name = append(name, v-32)
+				} else {
+					name = append(name, v)
+				}
 				nextUc = false
 			} else {
 				name = append(name, v)
