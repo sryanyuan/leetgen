@@ -74,19 +74,26 @@ func makefileCC(f *os.File, desc string, code string) error {
 	buf.WriteString("public:\r\n")
 	buf.WriteString("\tstatic void test() {\r\n\t\t\r\n\t}\r\n\r\n")
 	buf.WriteString("\tstatic ")
-	for i := 2; i < len(lines)-1; i++ {
-		line := strings.TrimSpace(lines[i])
-		if i == 2 {
-			buf.WriteString(line)
-			buf.WriteString("\r\n")
-		} else {
-			buf.WriteString("\t")
-			if i == 3 {
-				buf.WriteString("\t")
-			}
-			buf.WriteString(line)
-			if 1 != len(lines)-1 {
+	lineNo := -1
+	for i := 0; i < len(lines)-1; i++ {
+		if strings.HasPrefix(strings.TrimSpace(lines[i]), "public:") {
+			lineNo = i
+			continue
+		}
+		if lineNo >= 0 {
+			line := strings.TrimSpace(lines[i])
+			if i-lineNo == 1 {
+				buf.WriteString(line)
 				buf.WriteString("\r\n")
+			} else {
+				buf.WriteString("\t")
+				if i-lineNo == 2 {
+					buf.WriteString("\t")
+				}
+				buf.WriteString(line)
+				if 1 != len(lines)-1 {
+					buf.WriteString("\r\n")
+				}
 			}
 		}
 	}
