@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/chromedp/chromedp"
@@ -36,7 +37,7 @@ func getDescription(problemName string) string {
 
 func getCodeDefinition(problemName string) string {
 	var err error
-	ctx, cancelFn := context.WithCancel(context.Background())
+	ctx, cancelFn := context.WithTimeout(context.Background(), time.Minute*5)
 	defer cancelFn()
 
 	cdp, err := chromedp.New(ctx)
